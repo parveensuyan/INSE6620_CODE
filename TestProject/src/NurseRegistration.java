@@ -62,7 +62,8 @@ public class NurseRegistration implements ActionListener {
     
 	//Creating user-defined method
     public void createWindow()
-    {
+    {          JScrollBar oneJScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+
        //Setting properties of JFrame
         frame=new JFrame();
         frame.setTitle("Registration Form");
@@ -72,6 +73,7 @@ public class NurseRegistration implements ActionListener {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    
+        frame.add(oneJScrollBar, BorderLayout.NORTH);
 
         frame.setResizable(true);
     }
@@ -164,7 +166,7 @@ public class NurseRegistration implements ActionListener {
                    //Creating Connection Object
                    Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
                    
-                   PreparedStatement Pstatement1=connection.prepareStatement("select EMAIL from student where EMAIL = ?");
+                   PreparedStatement Pstatement1=connection.prepareStatement("select EMAIL from nurses where EMAIL = ?");
                    Pstatement1.setString(1,emailTextField.getText());
                    ResultSet rs = Pstatement1.executeQuery();
                    if(rs.next()) {
@@ -173,9 +175,13 @@ public class NurseRegistration implements ActionListener {
                    }else {
                    rs.close();
                    //Preapared Statement
-                   PreparedStatement Pstatement=connection.prepareStatement("insert into student(USERNAME,GENDER,FATHERS_NAME,PASSWRD,CONFIRMPASSWRD,CITY,EMAIL,street) values(?,?,?,?,?,?,?,?)");
+                   PreparedStatement Pstatement=connection.prepareStatement("insert into nurses(name,"
+                   		+ "GENDER,address,PASSWRD,CONFIRMPASSWRD,CITY,EMAIL,street,country,postalcode,"
+                   		+ "contact,dob,qualification,"
+                   		+ "experience,license) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                    //Specifying the values of it's parameter
 //                   Pstatement.setString(1,'4');
+             
                    Pstatement.setString(1,nameTextField.getText());
                    Pstatement.setString(2,genderComboBox.getSelectedItem().toString());
                    Pstatement.setString(3,addresssTextField.getText());
@@ -185,6 +191,13 @@ public class NurseRegistration implements ActionListener {
 
                    Pstatement.setString(7,emailTextField.getText());
                    Pstatement.setString(8,streetTextField.getText());
+                   Pstatement.setString(9,countryTextField.getText());      
+                   Pstatement.setString(10,postalcodeTextField.getText());
+                   Pstatement.setString(11,contactTextField.getText());
+                   Pstatement.setString(12,dobTextField.getText());
+                   Pstatement.setString(13,qualificationTextField.getText());
+                   Pstatement.setString(14,experienceTextField.getText());
+                   Pstatement.setString(15,licenseTextField.getText());
                    
                    //Checking for the Password match
                    if(passwordField.getText().equalsIgnoreCase(confirmPasswordField.getText()))
