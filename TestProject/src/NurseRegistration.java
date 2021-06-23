@@ -66,22 +66,24 @@ public class NurseRegistration implements ActionListener {
 
        //Setting properties of JFrame
         frame=new JFrame();
+	 
+
         frame.setTitle("Registration Form");
-        frame.setBounds(40,40,380,600);
+        frame.setSize(800,800);
         frame.getContentPane().setBackground(Color.decode("#EEEEEE"));
         frame.getContentPane().setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    
         frame.add(oneJScrollBar, BorderLayout.NORTH);
-
+        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         frame.setResizable(true);
     }
     public void setLocationAndSize() {
 
         //Setting Location and Size of Each Component
         nameLabel.setBounds(20,20,40,70);
-        genderLabel.setBounds(20,70,80,70);
+        genderLabel.setBounds(20,70,60,70);
         address.setBounds(20,120,100,70);
         passwordLabel.setBounds(20,170,100,70);
         confirmPasswordLabel.setBounds(20,220,140,70);
@@ -93,8 +95,8 @@ public class NurseRegistration implements ActionListener {
         contactLabel.setBounds(20,520,100,70);
         dobLabel.setBounds(20,570,100,70);
         qualificationLabel.setBounds(20,620,100,70);
-        experienceLabel.setBounds(20,670,100,70);
-        licenseLabel.setBounds(20,720,100,70);
+        experienceLabel.setBounds(420,20,80,70);
+        licenseLabel.setBounds(420,70,100,70);
         
         nameTextField.setBounds(180,43,165,23);
         genderComboBox.setBounds(180,93,165,23);
@@ -109,11 +111,11 @@ public class NurseRegistration implements ActionListener {
         contactTextField.setBounds(180,543,165,23);
         dobTextField.setBounds(180,593,165,23);
         qualificationTextField.setBounds(180,643,165,23);
-        experienceTextField.setBounds(180,693,165,23);
-        licenseTextField.setBounds(180,743,165,23);
+        experienceTextField.setBounds(500,43,170,23);
+        licenseTextField.setBounds(500,93,170,23);
         
-        registerButton.setBounds(70,793,100,35);
-        resetButton.setBounds(220,793,100,35);
+        registerButton.setBounds(500,143,100,35);
+        resetButton.setBounds(620,143,100,35);
     }
     public void actionEvent()
     {
@@ -204,7 +206,11 @@ public class NurseRegistration implements ActionListener {
                    {
                        //Executing query
                        Pstatement.executeUpdate();
-                       JOptionPane.showMessageDialog(null,"Data Registered Successfully");
+                       LoginPage login = new LoginPage();
+                       frame.dispose();
+
+                       JOptionPane.showMessageDialog(null,"Login Please");
+
                    }
                    else
                    {
@@ -220,14 +226,22 @@ public class NurseRegistration implements ActionListener {
            }
            if(e.getSource()==resetButton)
            {
-               //Clearing Fields
+         
                nameTextField.setText("");
                genderComboBox.setSelectedItem("Male");
                addresssTextField.setText("");
                passwordField.setText("");
                confirmPasswordField.setText("");
                cityTextField.setText("");
+               streetTextField.setText("");
+               countryTextField.setText("");
+               postalcodeTextField.setText("");
                emailTextField.setText("");
+               contactTextField.setText("");
+               dobTextField.setText("");
+               qualificationTextField.setText("");
+               experienceTextField.setText("");
+               licenseTextField.setText("");
            }
     }
 }

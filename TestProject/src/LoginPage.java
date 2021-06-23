@@ -10,10 +10,16 @@ public class LoginPage implements ActionListener {
 
     //Creating objects
     String[] user ={"Select","Nurse","Agency","Hospital"};
+    
+    String[] register ={"Select","Nurse Registration","Agency Registration","Hospital Registration"};
+    JLabel registerLabel =new JLabel("Register Yourself");
+
     JLabel userLabel =new JLabel("Please choose the occupation");
     JLabel emailLabel=new JLabel("EMAIL");
     JLabel passwordLabel=new JLabel("PASSWORD");
 
+    JComboBox registerComboBox = new JComboBox(register);
+    
     JComboBox userComboBox=new JComboBox(user);
 
     JTextField emailTextField=new JTextField();
@@ -61,11 +67,13 @@ public class LoginPage implements ActionListener {
     public void setLocationAndSize() {
 
         //Setting Location and Size of Each Component
-
+    	registerLabel.setBounds(20,-15,300,70);
     	userLabel.setBounds(20,20,300,70);
     	emailLabel.setBounds(20,70,80,70);
         passwordLabel.setBounds(20,120,100,70);
        
+        registerComboBox.setBounds(220,2,165,23);
+
         userComboBox.setBounds(220,43,165,23);
         emailTextField.setBounds(220,93,165,23);
         passwordField.setBounds(220,143,165,23);
@@ -78,16 +86,18 @@ public class LoginPage implements ActionListener {
     {
         loginButton.addActionListener(this);
         userComboBox.addActionListener(this);
+        registerComboBox.addActionListener(this);
     }
     public void addComponentsToFrame()
     {
         //Adding components to Frame
+    	frame.add(registerLabel);
         frame.add(userLabel);
         frame.add(passwordLabel);
         frame.add(emailLabel);
 
 
-        
+        frame.add(registerComboBox);
         frame.add(userComboBox);
         frame.add(passwordField);
         frame.add(emailTextField);
@@ -98,8 +108,23 @@ public class LoginPage implements ActionListener {
     public void actionPerformed(ActionEvent e) {
     	
     		 String userComboValue = userComboBox.getSelectedItem().toString();
-    	
+    		 String registerComboValue = registerComboBox.getSelectedItem().toString();
     		 String tableDB;
+    		 if(registerComboBox.getSelectedItem().toString().equals("Nurse Registration")) {
+            		
+    			    NurseRegistration nurseRegister = new NurseRegistration();
+    			    frame.dispose();
+    		 }
+    		 else if (registerComboBox.getSelectedItem().toString().equals("Agency Registration")) {
+    			 AgencyRegistration agencyRegister = new AgencyRegistration();
+ 			    frame.dispose();
+    		 }
+    		 else if (registerComboBox.getSelectedItem().toString().equals("Hospital Registration")) {
+    			 HospitalRegistration hospitalRegister = new HospitalRegistration();
+  			    frame.dispose();
+    		 }
+    		 
+    		 else {
     	   if(e.getSource()==loginButton)
            {
                try {
@@ -119,15 +144,28 @@ public class LoginPage implements ActionListener {
                 	   tableDB = "hospital";
                    }
                   
-                   PreparedStatement Pstatement1=connection.prepareStatement("select EMAIL,PASSWRD from "+ tableDB +" where EMAIL = ?");
+                   PreparedStatement Pstatement1=connection.prepareStatement("select nurse_id,EMAIL,PASSWRD from "+ tableDB +" where EMAIL = ?");
 
                    Pstatement1.setString(1,emailTextField.getText());
                    ResultSet rs = Pstatement1.executeQuery();
                   
                    if(rs.next()) {
                 	   if(passwordField.getText().equalsIgnoreCase(rs.getString("PASSWRD"))) {
-                		   JOptionPane.showMessageDialog(null,rs.getString("PASSWRD"));  
-                		   
+                		   if(tableDB == "nurses") {
+                			   MenuExample menuNurse = new MenuExample();
+                			   JOptionPane.showMessageDialog(null,rs.getString("nurse_id"));  
+                			   menuNurse.CheckNurseID(rs.getString("nurse_id"),tableDB);
+                		   }
+                		   else if(tableDB == "agency") {
+                			   MenuExample menuNurse = new MenuExample();
+                			   JOptionPane.showMessageDialog(null,rs.getString("nurse_id"));  
+                			   menuNurse.CheckNurseID(rs.getString("agency_id"),tableDB);
+                		   }
+                		   else {
+                			   MenuExample menuNurse = new MenuExample();
+                			   JOptionPane.showMessageDialog(null,rs.getString("hospital_id"));  
+                			   menuNurse.CheckNurseID(rs.getString("hospital_id"),tableDB);
+                		   }
                 	   }
                 	   else {
                 		   JOptionPane.showMessageDialog(null,"Please try again");  
@@ -147,6 +185,6 @@ public class LoginPage implements ActionListener {
     
     
            }
-
+    		 }
     }
 }
