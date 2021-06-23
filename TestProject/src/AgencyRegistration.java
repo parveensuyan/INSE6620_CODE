@@ -186,7 +186,8 @@ public class AgencyRegistration implements ActionListener {
                    {
                        //Executing query
                        Pstatement.executeUpdate();
-                       JOptionPane.showMessageDialog(null,"Data Registered Successfully");
+                       LoginPage login = new LoginPage();
+                       frame.dispose();
                    }
                    else
                    {

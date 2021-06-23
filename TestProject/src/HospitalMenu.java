@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;    
-public class MenuExample implements ActionListener, MenuListener {    
+public class HospitalMenu implements ActionListener, MenuListener {    
 JFrame frame,frameAllshift;    
 JMenuBar menuBarDashboard;    
 JMenu allShiftMenu,addAvailabilityMenu,updateProfileMenu,logoutMenu;    
@@ -32,7 +32,7 @@ JList list;
 JLabel preferenceLabel;
 JComboBox  preferenceComboBox;
 public String id,tableDB;
-MenuExample(){   
+HospitalMenu(){   
 frame=new JFrame();   
  list = new JList();
 
@@ -47,7 +47,7 @@ String[] preference ={"Select","Day","Night"};
 menuBarDashboard = new JMenuBar();    
 
 allShiftMenu = new JMenu("All Shifts");    
-addAvailabilityMenu =new JMenu("Add Availability");    
+addAvailabilityMenu =new JMenu("Add Schedule ");    
 updateProfileMenu = new JMenu("Update Profile");     
 logoutMenu =new JMenu("Logout");   
   
@@ -81,15 +81,15 @@ public void actionPerformed(ActionEvent e) {
 				 JOptionPane.showMessageDialog(null,"Please Try again");  
 
 				}else {
-				if(tableDB.equals("nurses") ) {
+				if(tableDB.equals("hospital") ) {
 					int nurse_ids;
 					try {
 			            //Creating Connection Object
 			            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
 			            
 			            //Preapared Statement
-			            PreparedStatement Pstatement=connection.prepareStatement("insert into add_preference(nurse_id,"
-			            		+ "preference) values(?,?)");
+			            PreparedStatement Pstatement=connection.prepareStatement("insert into add_schedule(hospital_id,"
+			            		+ "schedule_day_night) values(?,?)");
 			            //Specifying the values of it's parameter
 			      
 			            Pstatement.setString(1,id);
@@ -103,13 +103,13 @@ public void actionPerformed(ActionEvent e) {
 //		            	"select prefer_id from add_preference ORDER BY Id DESC LIMIT 1"
 
 			            
-			            	PreparedStatement Pstatement1 = connection.prepareStatement("select prefer_id from add_preference ORDER BY prefer_id DESC LIMIT 1");
+			            	PreparedStatement Pstatement1 = connection.prepareStatement("select schedule_id from add_schedule ORDER BY schedule_id DESC LIMIT 1");
 //
 			                   ResultSet rs = Pstatement1.executeQuery();
 			                   if(rs.next()) {
-			                	String last_inserted_id = rs.getString("prefer_id");
-			                	 PreparedStatement Pstatement2=connection.prepareStatement("insert into add_preference_day(prefer_id,nurse_id,"
-						            		+ "preference_day) values(?,?,?)");
+			                	String last_inserted_id = rs.getString("schedule_id");
+			                	 PreparedStatement Pstatement2=connection.prepareStatement("insert into add_schedule_day(schedule_id,nurse_id,"
+						            		+ "schedule_day) values(?,?,?)");
 						            //Specifying the values of it's parameter
 			                	 	Pstatement2.setString(1,last_inserted_id);
 						            Pstatement2.setString(2,id);
@@ -292,7 +292,7 @@ public void addDataIntoDatabase() {
 //            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
 //            
 //            //Preapared Statement
-//            PreparedStatement Pstatement=connection.prepareStatement("insert into add_preference(nurse_id,"
+//            PreparedStatement Pstatement=connection.prepareStatement("insert into add_preference(hospital_id,"
 //            		+ "preference) values(?,?)");
 //            //Specifying the values of it's parameter
 //      

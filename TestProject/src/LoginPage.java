@@ -109,7 +109,7 @@ public class LoginPage implements ActionListener {
     	
     		 String userComboValue = userComboBox.getSelectedItem().toString();
     		 String registerComboValue = registerComboBox.getSelectedItem().toString();
-    		 String tableDB;
+    		 String tableDB,tablefield;
     		 if(registerComboBox.getSelectedItem().toString().equals("Nurse Registration")) {
             		
     			    NurseRegistration nurseRegister = new NurseRegistration();
@@ -136,15 +136,18 @@ public class LoginPage implements ActionListener {
                    Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
                    if(userComboValue == "Nurse") {
                 	   tableDB = "nurses";
+                	   tablefield = "nurse_id";
                    }
                    else if(userComboValue == "Agency"){
                 	   tableDB = "agency";
+                	   tablefield = "agency_id";
 
                    }else {
                 	   tableDB = "hospital";
+                	   tablefield = "hospital_id";
                    }
                   
-                   PreparedStatement Pstatement1=connection.prepareStatement("select nurse_id,EMAIL,PASSWRD from "+ tableDB +" where EMAIL = ?");
+                   PreparedStatement Pstatement1=connection.prepareStatement("select "+ tablefield +", EMAIL,PASSWRD from "+ tableDB +" where EMAIL = ?");
 
                    Pstatement1.setString(1,emailTextField.getText());
                    ResultSet rs = Pstatement1.executeQuery();
@@ -153,18 +156,17 @@ public class LoginPage implements ActionListener {
                 	   if(passwordField.getText().equalsIgnoreCase(rs.getString("PASSWRD"))) {
                 		   if(tableDB == "nurses") {
                 			   MenuExample menuNurse = new MenuExample();
-                			   JOptionPane.showMessageDialog(null,rs.getString("nurse_id"));  
                 			   menuNurse.CheckNurseID(rs.getString("nurse_id"),tableDB);
                 		   }
                 		   else if(tableDB == "agency") {
                 			   MenuExample menuNurse = new MenuExample();
-                			   JOptionPane.showMessageDialog(null,rs.getString("nurse_id"));  
+                			   JOptionPane.showMessageDialog(null,rs.getString("agency_id"));  
                 			   menuNurse.CheckNurseID(rs.getString("agency_id"),tableDB);
                 		   }
                 		   else {
-                			   MenuExample menuNurse = new MenuExample();
+                			   HospitalMenu menuhospital = new HospitalMenu();
                 			   JOptionPane.showMessageDialog(null,rs.getString("hospital_id"));  
-                			   menuNurse.CheckNurseID(rs.getString("hospital_id"),tableDB);
+                			   menuhospital.CheckNurseID(rs.getString("hospital_id"),tableDB);
                 		   }
                 	   }
                 	   else {
