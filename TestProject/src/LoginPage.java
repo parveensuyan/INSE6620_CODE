@@ -159,13 +159,11 @@ public class LoginPage implements ActionListener {
                 			   menuNurse.CheckNurseID(rs.getString("nurse_id"),tableDB);
                 		   }
                 		   else if(tableDB == "agency") {
-                			   MenuExample menuNurse = new MenuExample();
-                			   JOptionPane.showMessageDialog(null,rs.getString("agency_id"));  
-                			   menuNurse.CheckNurseID(rs.getString("agency_id"),tableDB);
+                			   AgencyMenu menuagency = new AgencyMenu();
+                			   menuagency.CheckNurseID(rs.getString("agency_id"),tableDB);
                 		   }
                 		   else {
                 			   HospitalMenu menuhospital = new HospitalMenu();
-                			   JOptionPane.showMessageDialog(null,rs.getString("hospital_id"));  
                 			   menuhospital.CheckNurseID(rs.getString("hospital_id"),tableDB);
                 		   }
                 	   }
