@@ -204,12 +204,21 @@ public class AgencyRegistration implements ActionListener {
            if(e.getSource()==resetButton)
            {
                //Clearing Fields
+     
+               
                nameTextField.setText("");
                addresssTextField.setText("");
                passwordField.setText("");
                confirmPasswordField.setText("");
                cityTextField.setText("");
+               streetTextField.setText("");
+               countryTextField.setText("");
+               postalcodeTextField.setText("");
                emailTextField.setText("");
+               contactTextField.setText("");
+            
+               agencyTextField.setText("");
+               certifiedTextField.setText("");
            }
     }
 }

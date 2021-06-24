@@ -161,41 +161,38 @@ public void menuSelected(MenuEvent e) {
         
         backButton.setBounds(5,5,80,30);    
         backButton.addActionListener(this);
-        String data[][] = null;  
-		String column[]={"ID","Shift"};  
+        String rec[][] = new String[1][];
+        JTable table1 ;
+        panelAllshift.add(backButton);
        // backButton.setBackground(Color.yellow);   
-        if(tableDB.equals("nurses") ) {
-         
-			 try {
-                 //Creating Connection Object
-          	
-                 Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
-               
-                 PreparedStatement Pstatement1=connection.prepareStatement("select * from add_preference_day where nurse_id = ?");
+		 try {
+             //Creating Connection Object
+      	
+             Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
+           
+             PreparedStatement Pstatement1=connection.prepareStatement("select * from assignment limit 1");
 
-                 Pstatement1.setString(1,id);
-                 ResultSet rs = Pstatement1.executeQuery();
-                 while (rs.next()) {
-                	 String idss = rs.getString("nurse_id");
-                     String name = rs.getString("preference_day");
-                     String job = rs.getString("preference_day");
-                     System.out.println(idss+"   "+name+"    "+job);     
-                    
+             ResultSet rs = Pstatement1.executeQuery();
 
-                 }
-  
-             } catch (SQLException e1) {
-                 e1.printStackTrace();
+             int i=0;
+             while (rs.next()) {
+            	 String hostpital_id = rs.getString("nurse_id");
+            	 String schedule_id = rs.getString("hospital_id");
+            	 String schedule_date = rs.getString("preference_day");
+            	 rec[i] = new String[] {hostpital_id,schedule_id,schedule_date};
+            	 i = i+1;
              }
-        }
-  
-  
-			JTable jt=new JTable(data,column);    
-			jt.setBounds(50,100,500,500);          
-			JScrollPane sp=new JScrollPane(jt);    
+
+         } catch (SQLException e1) {
+             e1.printStackTrace();
+         }
+		
+		    panelAllshift.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Assign shifts", TitledBorder.CENTER, TitledBorder.TOP));
+		    String[] header = { "Nurse Id", "Hospital Id", "Preference Day" };
+		     JTable table11= new JTable(rec, header);
+		        panelAllshift.add(table11);   
         
         panelAllshift.add(backButton);
-        panelAllshift.add(sp);
         frameAllshift.add(panelAllshift); 
                   
         frameAllshift.setSize(600,600);    
@@ -216,7 +213,7 @@ public void menuSelected(MenuEvent e) {
 	}
 	else {
     if(e.getSource().equals(logoutMenu)) {
-//	   System.exit(0);
+	   System.exit(0);
    }
 	}
 }

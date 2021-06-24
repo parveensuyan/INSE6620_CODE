@@ -146,16 +146,16 @@ public class LoginPage implements ActionListener {
                 	   tableDB = "hospital";
                 	   tablefield = "hospital_id";
                    }
-                  
+                  System.out.println("select "+ tablefield +", EMAIL,PASSWRD from "+ tableDB +" where EMAIL = ?");
+                 
                    PreparedStatement Pstatement1=connection.prepareStatement("select "+ tablefield +", EMAIL,PASSWRD from "+ tableDB +" where EMAIL = ?");
-
                    Pstatement1.setString(1,emailTextField.getText());
+                   System.out.println(emailTextField.getText());
                    ResultSet rs = Pstatement1.executeQuery();
-                  
                    if(rs.next()) {
                 	   if(passwordField.getText().equalsIgnoreCase(rs.getString("PASSWRD"))) {
                 		   if(tableDB == "nurses") {
-                			   MenuExample menuNurse = new MenuExample();
+                			   NurseMenu menuNurse = new NurseMenu();
                 			   menuNurse.CheckNurseID(rs.getString("nurse_id"),tableDB);
                 		   }
                 		   else if(tableDB == "agency") {
@@ -165,6 +165,8 @@ public class LoginPage implements ActionListener {
                 		   else {
                 			   HospitalMenu menuhospital = new HospitalMenu();
                 			   menuhospital.CheckNurseID(rs.getString("hospital_id"),tableDB);
+                               System.out.println(rs.getString("hospital_id"));
+
                 		   }
                 	   }
                 	   else {

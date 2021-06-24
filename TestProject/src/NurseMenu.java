@@ -23,17 +23,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;    
-public class HospitalMenu implements ActionListener, MenuListener {    
+public class NurseMenu implements ActionListener, MenuListener {    
 JFrame frame,frameAllshift;    
 JMenuBar menuBarDashboard;    
 JMenu allShiftMenu,addAvailabilityMenu,updateProfileMenu,logoutMenu;    
 JButton backButton,submitButton;
 JTextArea ta;
 JList list;
-JLabel preferenceLabel,Username;
+JLabel preferenceLabel;
 JComboBox  preferenceComboBox;
 public String id,tableDB;
-HospitalMenu(){   
+NurseMenu(){   
 frame=new JFrame();   
  list = new JList();
 
@@ -44,28 +44,15 @@ String[] preference ={"Select","Day","Night"};
 
  preferenceLabel = new JLabel("Preference");
   preferenceComboBox = new JComboBox(preference);
-  
+
 menuBarDashboard = new JMenuBar();    
 
 allShiftMenu = new JMenu("All Shifts");    
-addAvailabilityMenu =new JMenu("Add Schedule ");    
+addAvailabilityMenu =new JMenu("Add Availability");    
 updateProfileMenu = new JMenu("Update Profile");     
 logoutMenu =new JMenu("Logout");   
   
-try {
-    //Creating Connection Object
-	
-    Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
-  
-    PreparedStatement Pstatement1=connection.prepareStatement("select * from hospital where hospital_id = ?");
-    Pstatement1.setString(1,id);
-    ResultSet rs = Pstatement1.executeQuery();
-	Username = new JLabel("Welcome " + rs.getString("name"));
-	Username.setBounds(30,30,70,70);
-		frame.add(Username);
-} catch (SQLException e1) {
-    e1.printStackTrace();
-}
+
 allShiftMenu.addMenuListener(this);    
 addAvailabilityMenu.addMenuListener(this);    
 updateProfileMenu.addMenuListener(this);    
@@ -95,15 +82,15 @@ public void actionPerformed(ActionEvent e) {
 				 JOptionPane.showMessageDialog(null,"Please Try again");  
 
 				}else {
-				if(tableDB.equals("hospital") ) {
+				if(tableDB.equals("nurses") ) {
 					int nurse_ids;
 					try {
 			            //Creating Connection Object
 			            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
 			            
 			            //Preapared Statement
-			            PreparedStatement Pstatement=connection.prepareStatement("insert into add_schedule(hospital_id,"
-			            		+ "schedule_day_night) values(?,?)");
+			            PreparedStatement Pstatement=connection.prepareStatement("insert into add_preference(nurse_id,"
+			            		+ "preference) values(?,?)");
 			            //Specifying the values of it's parameter
 			      
 			            Pstatement.setString(1,id);
@@ -117,13 +104,13 @@ public void actionPerformed(ActionEvent e) {
 //		            	"select prefer_id from add_preference ORDER BY Id DESC LIMIT 1"
 
 			            
-			            	PreparedStatement Pstatement1 = connection.prepareStatement("select schedule_id from add_schedule ORDER BY schedule_id DESC LIMIT 1");
+			            	PreparedStatement Pstatement1 = connection.prepareStatement("select prefer_id from add_preference ORDER BY prefer_id DESC LIMIT 1");
 //
 			                   ResultSet rs = Pstatement1.executeQuery();
 			                   if(rs.next()) {
-			                	String last_inserted_id = rs.getString("schedule_id");
-			                	 PreparedStatement Pstatement2=connection.prepareStatement("insert into add_schedule_day(schedule_id,nurse_id,"
-						            		+ "schedule_day) values(?,?,?)");
+			                	String last_inserted_id = rs.getString("prefer_id");
+			                	 PreparedStatement Pstatement2=connection.prepareStatement("insert into add_preference_day(prefer_id,nurse_id,"
+						            		+ "preference_day) values(?,?,?)");
 						            //Specifying the values of it's parameter
 			                	 	Pstatement2.setString(1,last_inserted_id);
 						            Pstatement2.setString(2,id);
@@ -160,7 +147,8 @@ public void CheckNurseID(String id,String tableDB) {
 }
 @Override
 public void menuSelected(MenuEvent e) {
-	
+	 String rec[][] = new String[1][];
+	 JTable table1 ;
 	// TODO Auto-generated method stub
 	if(e.getSource().equals(allShiftMenu)) {
 		
@@ -174,40 +162,41 @@ public void menuSelected(MenuEvent e) {
         
         backButton.setBounds(5,5,80,30);    
         backButton.addActionListener(this);
-        String rec[][] = new String[1][];
-        JTable table1 ;
+       
         panelAllshift.add(backButton);
        // backButton.setBackground(Color.yellow);   
-		 try {
-             //Creating Connection Object
-      	
-             Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
-           
-             PreparedStatement Pstatement1=connection.prepareStatement("select * from add_schedule_day where nurse_id = ?");
+        if(tableDB.equals("nurses") ) {
+         
+			 try {
+                 //Creating Connection Object
+          	
+                 Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
+               
+                 PreparedStatement Pstatement1=connection.prepareStatement("select * from add_preference_day where nurse_id = ?");
 
-             Pstatement1.setString(1,id);
-             ResultSet rs = Pstatement1.executeQuery();
+                 Pstatement1.setString(1,id);
+                 ResultSet rs = Pstatement1.executeQuery();
 
-             int i=0;
-             while (rs.next()) {
-            	 String hostpital_id = rs.getString("nurse_id");
-            	 String schedule_id = rs.getString("schedule_day_id");
-            	 String schedule_date = rs.getString("schedule_day");
-            	 rec[i] = new String[] {hostpital_id,schedule_id,schedule_date};
-            	 i = i+1;
+                 int i=0;
+                 while (rs.next()) {
+                	 String hostpital_id = rs.getString("nurse_id");
+                	 String schedule_id = rs.getString("preference_day");
+                	 String schedule_date = rs.getString("preference_day");
+                	 rec[i] = new String[] {hostpital_id,schedule_id,schedule_date};
+                	 i = i+1;
+                 }
+  
+             } catch (SQLException e1) {
+                 e1.printStackTrace();
              }
+			
+			    panelAllshift.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Assign shifts", TitledBorder.CENTER, TitledBorder.TOP));
+			    String[] header = { "Nurse Id", "Preference Id", "Preference Day" };
+			     JTable table11= new JTable(rec, header);
+			        panelAllshift.add(table11);
 
-         } catch (SQLException e1) {
-             e1.printStackTrace();
-         }
-		
-		    panelAllshift.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Assign shifts", TitledBorder.CENTER, TitledBorder.TOP));
-		    String[] header = { "Nurse Id", "Preference Id", "Preference Day" };
-		     JTable table11= new JTable(rec, header);
-		        panelAllshift.add(table11);
-
-        
-        
+        }
+  
         frameAllshift.add(panelAllshift); 
                   
         frameAllshift.setSize(600,600);    
@@ -305,7 +294,7 @@ public void addDataIntoDatabase() {
 //            Connection connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/nursemanagement","root","1234");
 //            
 //            //Preapared Statement
-//            PreparedStatement Pstatement=connection.prepareStatement("insert into add_preference(hospital_id,"
+//            PreparedStatement Pstatement=connection.prepareStatement("insert into add_preference(nurse_id,"
 //            		+ "preference) values(?,?)");
 //            //Specifying the values of it's parameter
 //      
